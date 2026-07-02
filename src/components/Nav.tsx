@@ -1,14 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
 import { site } from "@/data/site";
 
 export function Nav() {
   const [active, setActive] = useState("");
   const lenis = useLenis();
+  const deepLinked = useRef(false);
 
+  const scrollToSection = (id: string, immediate = false) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // center the section; for sections taller than the viewport, land on the
+    // top with room for the fixed nav.
+    const centerOffset = Math.max(0, (window.innerHeight - el.offsetHeight) / 2);
+    const target = el.offsetTop - centerOffset - (centerOffset === 0 ? 64 : 0);
+    if (lenis) {
+      lenis.scrollTo(target, immediate ? { immediate: true } : { duration: 1.1 });
+    } else {
+      window.scrollTo({ top: target, behavior: immediate ? "auto" : "smooth" });
+    }
+  };
+
+  // Track which section is in view (hero included).
   useEffect(() => {
+    const ids = ["top", ...site.nav.map((n) => n.id)];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -17,27 +34,37 @@ export function Nav() {
       },
       { rootMargin: "-40% 0px -55% 0px" },
     );
-
-    for (const { id } of site.nav) {
+    for (const id of ids) {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     }
     return () => observer.disconnect();
   }, []);
 
+  // Keep the URL hash in sync with the section in view (no jump, no history spam).
+  useEffect(() => {
+    if (!active) return;
+    const desired = active === "top" ? "" : `#${active}`;
+    if (window.location.hash !== desired) {
+      const base = window.location.pathname + window.location.search;
+      window.history.replaceState(null, "", desired ? base + desired : base);
+    }
+  }, [active]);
+
+  // Honor an incoming #section link on first load.
+  useEffect(() => {
+    if (deepLinked.current) return;
+    const id = window.location.hash.slice(1);
+    if (!id || !document.getElementById(id)) return;
+    deepLinked.current = true;
+    const t = window.setTimeout(() => scrollToSection(id, true), 250);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lenis]);
+
   const go = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    const el = document.getElementById(id);
-    if (!el) return;
-    // center the section in the viewport; for sections taller than the
-    // viewport, land on the top with room for the fixed nav.
-    const centerOffset = Math.max(0, (window.innerHeight - el.offsetHeight) / 2);
-    const target = el.offsetTop - centerOffset - (centerOffset === 0 ? 64 : 0);
-    if (lenis) {
-      lenis.scrollTo(target, { duration: 1.1 });
-    } else {
-      window.scrollTo({ top: target, behavior: "smooth" });
-    }
+    scrollToSection(id);
   };
 
   return (
