@@ -17,8 +17,10 @@ export type Project = {
   links: ProjectLink;
 };
 
-export type SkillGroup = {
-  title: string;
+export type SkillArea = {
+  id: string;
+  label: string;
+  blurb: string;
   items: string[];
 };
 
@@ -37,46 +39,77 @@ export const site = {
   },
 
   about: [
-    "I build the software around AI: the interfaces, the pipelines, and the systems that make a model useful to a real person. Over the last four years at Caqophony I shipped four products, working end to end from the React front end down through the APIs and the model layer.",
-    "My deepest work is in agentic systems, multi-agent pipelines and the harnesses that keep their output reliable, but the throughline is the same everywhere: turn something powerful and messy into something a person can actually use. I care about shipping, about code that holds up, and about staying current as the tooling keeps changing.",
+    "I'm a full-stack and agentic engineer. For the last four years at Caqophony I've shipped four production products end to end, from the React interfaces people touch down through the APIs, the data, and the model layer underneath.",
+    "My deepest work is in agentic systems: multi-agent pipelines that turn a plain intent into working software, the harnesses and evaluation loops that keep their output reliable, and the cost-aware model routing that makes them affordable to run. The throughline of that work is a conviction that quality lives in the system around the model, not the model itself. A good harness gets near-perfect output from whatever model is current, by constraining what the model is free to get wrong and treating every derivable decision as engineering rather than guesswork.",
+    "The range is real too. I've built streaming AI interfaces, peer-to-peer marketplaces, commerce and payments, mapping and search, all on Next.js, React, and TypeScript with production discipline throughout. I move fast, I care about code that holds up under its own tests, and I stay close to where the tooling is heading, since most of what I reach for now is newer than a year old.",
   ],
 
-  skills: [
+  skillAreas: [
     {
-      title: "Full-Stack Development",
+      id: "frontend",
+      label: "Frontend",
+      blurb:
+        "Where most of my time has gone. I build fast, accessible React interfaces, from streaming UIs that render a model's output live to complex filtering, search, maps, and motion. I'm comfortable owning the entire front end, from architecture and state management through to the finished, responsive production screen.",
       items: [
         "React",
         "Next.js",
         "TypeScript",
-        "React 19 / RSC",
-        "HTML / CSS",
+        "Server Components",
         "Tailwind CSS",
         "Framer Motion",
-        "Radix UI / a11y",
-        "Node.js",
-        "REST / SSE",
-        "PostgreSQL / Drizzle",
-        "Supabase",
-        "Stripe",
-        "Zod",
-        "Playwright",
-        "Vercel",
+        "Accessibility",
+        "Virtualized lists",
       ],
     },
     {
-      title: "AI / Agentic",
+      id: "backend",
+      label: "Backend & Data",
+      blurb:
+        "The APIs, data, and integrations that sit behind the interface. I build REST and streaming endpoints, model both relational and document databases, and wire up authentication, payments, and third-party services, with strict runtime validation enforced at every boundary so bad data never gets far.",
       items: [
-        "LLM API integration (Anthropic / OpenAI)",
-        "Streaming generation",
-        "Prompt engineering",
-        "Evaluation loops",
-        "Multi-agent pipelines",
-        "Harness & context design",
-        "Model Context Protocol (MCP)",
-        "RAG / retrieval",
+        "Node.js",
+        "REST / SSE",
+        "PostgreSQL",
+        "Drizzle ORM",
+        "Supabase",
+        "Auth (JWT/OAuth)",
+        "Stripe",
+        "Zod",
       ],
     },
-  ] satisfies SkillGroup[],
+    {
+      id: "ai",
+      label: "AI & Agentic Systems",
+      blurb:
+        "My deepest area. I build multi-agent pipelines, the harnesses and evaluation loops that keep their output reliable, prompt and context engineering, tool use over MCP, and sandboxed execution with cost-aware routing. The point is to build the system around the model, so quality never depends on the one you run.",
+      items: [
+        "Multi-agent",
+        "Harnesses",
+        "Prompt engineering",
+        "Evals",
+        "Claude / OpenAI",
+        "MCP",
+        "E2B sandboxes",
+        "Cost routing",
+      ],
+    },
+    {
+      id: "practice",
+      label: "Engineering Practice",
+      blurb:
+        "How I actually ship. Strict TypeScript with validation at every boundary, end-to-end tests that run the real product instead of mocks, monorepos, CI/CD, and observability once it is live. I work production-first, owning features from architecture and tickets through to deploy and the debugging afterward.",
+      items: [
+        "TypeScript strict",
+        "Zod boundaries",
+        "Playwright",
+        "Turborepo",
+        "CI/CD",
+        "Vercel",
+        "Sentry",
+        "Preview envs",
+      ],
+    },
+  ] satisfies SkillArea[],
 
   projects: [
     {
