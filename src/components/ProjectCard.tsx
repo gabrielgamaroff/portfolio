@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Lock } from "lucide-react";
 import { type Project } from "@/data/site";
 
@@ -9,26 +13,48 @@ export function ProjectCard({
   project: Project;
   reversed?: boolean;
 }) {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  // card-level fade + drift, tied to scroll
+  const opacity = useTransform(scrollYProgress, [0, 0.22, 0.8, 1], [0.15, 1, 1, 0.15]);
+  const cardY = useTransform(scrollYProgress, [0, 1], [48, -48]);
+  // image parallax within its frame
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
   return (
-    <article className="grid gap-6 rounded-2xl border border-line bg-surface-2 p-4 sm:p-6 md:grid-cols-2 md:items-center md:gap-10 md:p-8">
-      {/* Media */}
+    <motion.article
+      ref={ref}
+      style={reduce ? undefined : { opacity, y: cardY }}
+      className="grid gap-6 rounded-2xl border border-line bg-surface-2/70 p-4 backdrop-blur-sm sm:p-6 md:grid-cols-2 md:items-center md:gap-10 md:p-8"
+    >
+      {/* Media with parallax */}
       <div className={reversed ? "md:order-2" : ""}>
         <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-line bg-surface">
-          {project.image ? (
-            <Image
-              src={project.image}
-              alt={`${project.name} screenshot`}
-              fill
-              sizes="(min-width: 768px) 45vw, 90vw"
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <span className="font-mono text-sm text-faint">
-                {project.name}
-              </span>
-            </div>
-          )}
+          <motion.div
+            style={reduce ? undefined : { y: imgY }}
+            className="absolute inset-x-0 -top-[15%] h-[130%]"
+          >
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={`${project.name} screenshot`}
+                fill
+                sizes="(min-width: 768px) 45vw, 90vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <span className="font-mono text-sm text-faint">
+                  {project.name}
+                </span>
+              </div>
+            )}
+          </motion.div>
         </div>
       </div>
 
@@ -50,7 +76,10 @@ export function ProjectCard({
         <ul className="mt-4 space-y-2">
           {project.contributions.map((c) => (
             <li key={c} className="flex gap-3 text-sm leading-relaxed text-muted">
-              <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span
+                aria-hidden
+                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"
+              />
               <span>{c}</span>
             </li>
           ))}
@@ -87,6 +116,6 @@ export function ProjectCard({
           )}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
