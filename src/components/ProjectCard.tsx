@@ -1,121 +1,191 @@
 "use client";
 
-import Image from "next/image";
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Lock } from "lucide-react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useLenis } from "lenis/react";
+import { ArrowUpRight, Lock, X } from "lucide-react";
 import { type Project } from "@/data/site";
+import { ProjectGallery } from "./ProjectGallery";
 
-export function ProjectCard({
-  project,
-  reversed = false,
-}: {
-  project: Project;
-  reversed?: boolean;
-}) {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
+export function ProjectCard({ project }: { project: Project }) {
+  const lenis = useLenis();
 
-  // card-level fade + drift, tied to scroll
-  const opacity = useTransform(scrollYProgress, [0, 0.22, 0.8, 1], [0.15, 1, 1, 0.15]);
-  const cardY = useTransform(scrollYProgress, [0, 1], [48, -48]);
-  // image parallax within its frame
-  const imgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const onMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
+  // Freeze the smooth-scrolled background while the modal is open.
+  const onOpenChange = (open: boolean) => {
+    if (open) lenis?.stop();
+    else lenis?.start();
+  };
 
   return (
-    <motion.article
-      ref={ref}
-      style={reduce ? undefined : { opacity, y: cardY }}
-      className="grid gap-6 rounded-2xl border border-line bg-surface-2/70 p-4 backdrop-blur-sm sm:p-6 md:grid-cols-2 md:items-center md:gap-10 md:p-8"
-    >
-      {/* Media with parallax */}
-      <div className={reversed ? "md:order-2" : ""}>
-        <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-line bg-surface">
-          <motion.div
-            style={reduce ? undefined : { y: imgY }}
-            className="absolute inset-x-0 -top-[15%] h-[130%]"
-          >
-            {project.image ? (
-              <Image
-                src={project.image}
-                alt={`${project.name} screenshot`}
-                fill
-                sizes="(min-width: 768px) 45vw, 90vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <span className="font-mono text-sm text-faint">
-                  {project.name}
-                </span>
+    <Dialog.Root onOpenChange={onOpenChange}>
+      <Dialog.Trigger asChild>
+        <button
+          onMouseMove={onMove}
+          className="group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-line bg-surface-2/70 p-6 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_50px_-12px_rgb(0_0_0/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-8"
+        >
+          {/* cursor spotlight */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--color-accent) 12%, transparent), transparent 70%)",
+            }}
+          />
+
+          <div className="grid gap-6 md:grid-cols-2 md:gap-10">
+            {/* left: identity + summary */}
+            <div>
+              <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.08em] text-faint">
+                <span>{project.category}</span>
+                <span aria-hidden>·</span>
+                <span>{project.year}</span>
               </div>
+              <h3 className="mt-3 text-xl font-semibold tracking-[-0.01em] text-ink sm:text-2xl">
+                {project.name}
+              </h3>
+              <p className="mt-1 text-muted">{project.tagline}</p>
+              <p className="mt-4 leading-relaxed text-muted">
+                {project.description}
+              </p>
+            </div>
+
+            {/* right: what I built + tech */}
+            <div>
+              <ul className="space-y-2">
+                {project.contributions.map((c) => (
+                  <li
+                    key={c}
+                    className="flex gap-3 text-sm leading-relaxed text-muted"
+                  >
+                    <span
+                      aria-hidden
+                      className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"
+                    />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-full border border-line px-2.5 py-1 font-mono text-xs text-faint"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between border-t border-line/60 pt-4">
+            {project.links.note ? (
+              <span className="inline-flex items-center gap-1.5 text-xs text-faint">
+                <Lock className="h-3.5 w-3.5" />
+                {project.links.note}
+              </span>
+            ) : (
+              <span />
             )}
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Text */}
-      <div className={reversed ? "md:order-1" : ""}>
-        <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.08em] text-faint">
-          <span>{project.category}</span>
-          <span aria-hidden>·</span>
-          <span>{project.year}</span>
-        </div>
-
-        <h3 className="mt-3 text-xl font-semibold tracking-[-0.01em] text-ink sm:text-2xl">
-          {project.name}
-        </h3>
-        <p className="mt-1 text-muted">{project.tagline}</p>
-
-        <p className="mt-4 leading-relaxed text-muted">{project.description}</p>
-
-        <ul className="mt-4 space-y-2">
-          {project.contributions.map((c) => (
-            <li key={c} className="flex gap-3 text-sm leading-relaxed text-muted">
-              <span
-                aria-hidden
-                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent"
-              />
-              <span>{c}</span>
-            </li>
-          ))}
-        </ul>
-
-        <ul className="mt-5 flex flex-wrap gap-2">
-          {project.tech.map((t) => (
-            <li
-              key={t}
-              className="rounded-full border border-line px-2.5 py-1 font-mono text-xs text-faint"
-            >
-              {t}
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-6 flex items-center gap-4">
-          {project.links.live && (
-            <a
-              href={project.links.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-2"
-            >
-              Live site
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          )}
-          {project.links.note && (
-            <span className="inline-flex items-center gap-1.5 text-xs text-faint">
-              <Lock className="h-3.5 w-3.5" />
-              {project.links.note}
+            <span className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-transform duration-300 group-hover:translate-x-0.5">
+              View project <ArrowUpRight className="h-4 w-4" />
             </span>
-          )}
-        </div>
-      </div>
-    </motion.article>
+          </div>
+        </button>
+      </Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm motion-safe:data-[state=open]:animate-overlay-in motion-safe:data-[state=closed]:animate-overlay-out" />
+        {/* Content is a full-screen flex wrapper: centering never depends on transform. */}
+        <Dialog.Content className="group pointer-events-none fixed inset-0 z-[101] grid place-items-center p-4 motion-safe:data-[state=open]:animate-overlay-in motion-safe:data-[state=closed]:animate-overlay-out">
+          <div className="pointer-events-auto flex max-h-[88vh] w-[min(92vw,880px)] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl motion-safe:group-data-[state=open]:animate-pop-in motion-safe:group-data-[state=closed]:animate-pop-out">
+            {/* header */}
+            <div className="relative shrink-0 border-b border-line px-6 py-5 sm:px-8">
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/10 to-transparent" />
+              <div className="relative flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-faint">
+                <span>{project.category}</span>
+                <span aria-hidden>·</span>
+                <span>{project.year}</span>
+              </div>
+              <Dialog.Title className="relative mt-2 text-2xl font-semibold tracking-[-0.02em] text-ink">
+                {project.name}
+              </Dialog.Title>
+              <Dialog.Description className="relative mt-1 text-muted">
+                {project.tagline}
+              </Dialog.Description>
+              <Dialog.Close className="absolute right-4 top-4 cursor-pointer rounded-lg p-2 text-faint transition-colors hover:bg-surface-2 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+                <X className="h-4 w-4" />
+                <span className="sr-only">Close</span>
+              </Dialog.Close>
+            </div>
+
+            {/* scrollable body */}
+            <div
+              data-lenis-prevent
+              className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8"
+            >
+              <ProjectGallery name={project.name} gallery={project.gallery} />
+
+              <p className="mt-6 leading-relaxed text-muted">
+                {project.description}
+              </p>
+
+              <h4 className="mt-6 font-mono text-xs uppercase tracking-[0.08em] text-faint">
+                What I built
+              </h4>
+              <ul className="mt-3 space-y-2">
+                {project.contributions.map((c) => (
+                  <li key={c} className="flex gap-3 text-sm leading-relaxed text-muted">
+                    <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <h4 className="mt-6 font-mono text-xs uppercase tracking-[0.08em] text-faint">
+                Tech
+              </h4>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {project.tech.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-full border border-line px-2.5 py-1 font-mono text-xs text-faint"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                {project.links.live && (
+                  <a
+                    href={project.links.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-2"
+                  >
+                    Live site
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                )}
+                {project.links.note && (
+                  <span className="inline-flex items-center gap-1.5 text-xs text-faint">
+                    <Lock className="h-3.5 w-3.5" />
+                    {project.links.note}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

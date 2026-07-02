@@ -29,6 +29,31 @@ export function SnapController() {
     let unlockTimer: number | undefined;
     let snapping = false;
 
+    // Furthest-down snap position; anything below it is the footer => free scroll.
+    const lastSnap = (vp: number, maxY: number) => {
+      let m = 0;
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const pos =
+          el.offsetHeight > vp + 8 ? el.offsetTop + el.offsetHeight - vp : el.offsetTop;
+        m = Math.max(m, Math.min(pos, maxY));
+      }
+      return m;
+    };
+
+    // True inside a tall section (past its edges) => free scroll, never snap.
+    const insideTall = (y: number, vp: number) => {
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (!el || el.offsetHeight <= vp + 8) continue;
+        const top = el.offsetTop;
+        const bottom = el.offsetTop + el.offsetHeight - vp;
+        if (y > top + 2 && y < bottom - 2) return true;
+      }
+      return false;
+    };
+
     const candidates = (y: number, vp: number, maxY: number) => {
       const out: number[] = [];
       const add = (pos: number) => out.push(Math.max(0, Math.min(pos, maxY)));
@@ -68,6 +93,12 @@ export function SnapController() {
       else if (y < prev - 0.5) dir = -1;
       prev = y;
 
+      // Free scroll inside a tall section, or below the last section (footer zone).
+      if (insideTall(y, vp) || y > lastSnap(vp, maxY) + 4) {
+        window.clearTimeout(timer);
+        return;
+      }
+
       const cands = candidates(y, vp, maxY);
 
       // Gravity well: as soon as you head toward the nearest target, it pulls
@@ -94,6 +125,7 @@ export function SnapController() {
       timer = window.setTimeout(() => {
         if (snapping) return;
         const y2 = lenis.scroll;
+        if (insideTall(y2, vp) || y2 > lastSnap(vp, maxY) + 4) return;
         const c2 = candidates(y2, vp, maxY);
         if (!c2.length) return;
         let best = c2[0];

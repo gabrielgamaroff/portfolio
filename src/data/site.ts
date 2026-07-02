@@ -14,6 +14,8 @@ export type Project = {
   tech: string[];
   /** Path under /public, e.g. "/work/skrumrunner.png". Null renders a placeholder. */
   image: string | null;
+  /** Montage images for the modal (paths under /public). Missing entries render placeholders. */
+  gallery?: string[];
   links: ProjectLink;
 };
 
