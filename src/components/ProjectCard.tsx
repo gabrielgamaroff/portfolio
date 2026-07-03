@@ -27,7 +27,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <Dialog.Trigger asChild>
         <button
           onMouseMove={onMove}
-          className="group relative block w-full cursor-pointer overflow-hidden rounded-2xl border border-line bg-surface-2/70 p-6 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_50px_-12px_rgb(0_0_0/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-8"
+          className="group relative flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-line bg-surface-2/70 p-6 text-left backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_50px_-12px_rgb(0_0_0/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:p-8"
         >
           {/* cursor spotlight */}
           <span
@@ -59,7 +59,7 @@ export function ProjectCard({ project }: { project: Project }) {
             {/* right: what I built + tech */}
             <div>
               <ul className="space-y-2">
-                {project.contributions.map((c) => (
+                {project.contributions.slice(0, 3).map((c) => (
                   <li
                     key={c}
                     className="flex gap-3 text-sm leading-relaxed text-muted"
@@ -85,7 +85,7 @@ export function ProjectCard({ project }: { project: Project }) {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-between border-t border-line/60 pt-4">
+          <div className="mt-auto flex items-center justify-between border-t border-line/60 pt-6">
             {project.links.note ? (
               <span className="inline-flex items-center gap-1.5 text-xs text-faint">
                 <Lock className="h-3.5 w-3.5" />
@@ -134,7 +134,7 @@ export function ProjectCard({ project }: { project: Project }) {
               <ProjectGallery name={project.name} gallery={project.gallery} />
 
               <p className="mt-6 leading-relaxed text-muted">
-                {project.description}
+                {project.overview}
               </p>
 
               <h4 className="mt-6 font-mono text-xs uppercase tracking-[0.08em] text-faint">

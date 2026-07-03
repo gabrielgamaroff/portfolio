@@ -9,7 +9,10 @@ export type Project = {
   tagline: string;
   year: string;
   category: string;
+  /** Short summary shown on the card. */
   description: string;
+  /** Longer paragraph shown only in the modal. */
+  overview: string;
   contributions: string[];
   tech: string[];
   /** Path under /public, e.g. "/work/skrumrunner.png". Null renders a placeholder. */
@@ -120,24 +123,27 @@ export const site = {
       tagline:
         "Multi-agent platform that turns a product vision into a working software project.",
       year: "2024–2025",
-      category: "AI product",
+      category: "AI · Agentic",
       description:
-        "Autonomous agents plan, build, test, and verify a full software project from a plain product vision, with a human approving each stage. I worked across both the agent engine and the React interfaces that drive and observe it.",
+        "Autonomous agents compile a plain product vision into a working software project, blueprint through deploy, with a human approving each phase.",
+      overview:
+        "Skrumrunner is the flagship: a multi-agent system that takes a plain-language product vision and produces a structured software project, agents planning, writing, testing, and verifying while a human approves each phase. I worked across the whole thing, the agent engine and runtime underneath and the React interfaces that drive and observe it. The hard part is never generating code, it is making a long-running agent loop reliable and affordable, and that is where most of my work went.",
       contributions: [
-        "Built the multi-agent execution pipeline (plan, execute, adversarial verification) and the runtime it runs on.",
-        "Built real-time React dashboards that stream agent activity, plus the review interface for approving each phase.",
-        "Set up the component library, strict TypeScript, and a large end-to-end test suite across the monorepo.",
+        "Designed the multi-agent pipeline: separate plan, execute, and adversarial-verify agents with tiered model routing.",
+        "Built the agent runtime on E2B sandboxes with pause/resume, prompt caching, context compaction, and replay logging.",
+        "Built the QA agent that drives Playwright over MCP to test generated code and gate merges.",
+        "Built real-time dashboards streaming agent activity and token spend over SSE.",
+        "Owned the React UI and phase-approval flow on a strict-TypeScript monorepo.",
       ],
       tech: [
         "Next.js",
         "React",
         "TypeScript",
-        "Postgres / Drizzle",
         "Anthropic Claude",
+        "Multi-agent",
         "MCP",
-        "E2B",
+        "E2B sandboxes",
         "Playwright",
-        "Tailwind",
       ],
       image: null,
       links: { note: "Private repo · built at Caqophony" },
@@ -145,26 +151,29 @@ export const site = {
     {
       slug: "smartcast",
       name: "smartcast",
-      tagline: "AI podcast-script generator with a live streaming editor.",
+      tagline: "AI podcast-script generator with a live, model-powered editor.",
       year: "2023–2024",
       category: "AI product",
       description:
-        "Users configure topic, tone, structure, and length, and a script streams in token by token. Any paragraph can be rewritten with a plain instruction or sent through an auto-improve pass. Billed on a credit model tied to real usage.",
+        "An AI app that turns a short brief into a full podcast script, generated live by an LLM and edited paragraph by paragraph by instruction.",
+      overview:
+        "A production AI writing tool built on Claude. Give it a topic, tone, structure, and length and it streams a complete script back token by token; any paragraph can then be rewritten by the model from a natural-language instruction or improved automatically. The engineering focus was the generation and editing pipeline, all metered by real token usage. It was my first deep build on the applied LLM layer, and the foundation for the agentic work that followed.",
       contributions: [
-        "Built the streaming generation UI over server-sent events and the paragraph-level inline editor.",
-        "Built the multi-step configuration wizard, the credit and metering UI, and Stripe billing.",
-        "Shipped it end to end on strict TypeScript with Zod-validated APIs and Playwright coverage.",
+        "Built the streaming generation pipeline: Claude output over SSE with length-aware, format-specific prompts.",
+        "Engineered the prompts and the inline AI editor: rewrite any paragraph by instruction or an auto-improve pass.",
+        "Built usage-based token metering with cost estimates, credit billing, and a pre-run affordability gate.",
+        "Built the multi-step configuration wizard with persisted draft state.",
+        "Shipped on strict TypeScript with Zod-validated APIs and Playwright coverage.",
       ],
       tech: [
         "Next.js",
         "React",
         "TypeScript",
-        "Tailwind",
-        "Drizzle / Neon",
+        "Anthropic Claude",
+        "Prompt engineering",
+        "SSE streaming",
         "Stripe",
         "Supabase",
-        "Anthropic Claude",
-        "SSE",
       ],
       image: null,
       links: { note: "Private repo · built at Caqophony" },
@@ -175,13 +184,17 @@ export const site = {
       tagline:
         "Local-commerce marketplace connecting merchants and shoppers by town.",
       year: "2022–2023",
-      category: "Marketplace SaaS",
+      category: "Marketplace · AI content",
       description:
-        "A UK marketplace with merchant profiles, product listings, reviews, map-based discovery, and checkout, integrated with a POS platform and Stripe.",
+        "A UK local-commerce marketplace connecting merchants and shoppers by town, with map discovery, real checkout, and AI-generated content.",
+      overview:
+        "A marketplace SaaS on Next.js, Supabase, and Stripe: merchant profiles, product listings, reviews, map-based discovery, and checkout, integrated with the Violet POS platform. I led the build end to end. It is where I got my depth on payments and third-party commerce integration, plus an early applied-AI touch for generating onboarding content.",
       contributions: [
-        "Led full-stack development on Next.js, Supabase, and Stripe.",
-        "Built the map-based discovery interface (Leaflet) and the merchant-onboarding flow.",
-        "Built the POS integration and an idempotent Stripe Elements checkout.",
+        "Led full-stack development on Next.js, Supabase, and Stripe, from schema to deploy.",
+        "Built the Violet POS integration abstracting cart, checkout, and orders with token refresh.",
+        "Built the Stripe Elements checkout with idempotent async order submission.",
+        "Built the map-based discovery surface (Leaflet) and merchant onboarding.",
+        "Integrated OpenAI to auto-generate town and merchant descriptions.",
       ],
       tech: [
         "Next.js",
@@ -189,6 +202,7 @@ export const site = {
         "TypeScript",
         "Supabase",
         "Stripe",
+        "Violet POS",
         "Leaflet",
         "OpenAI",
       ],
@@ -198,22 +212,27 @@ export const site = {
     {
       slug: "camperpro",
       name: "CamperPro",
-      tagline: "Peer-to-peer marketplace for booking private campsites.",
+      tagline: "Peer-to-peer marketplace for discovering and booking campsites.",
       year: "2022",
       category: "Marketplace",
       description:
-        "Landowners list campsites with rich metadata; campers discover, filter, and book. One of the first products I owned end to end.",
+        "A peer-to-peer marketplace where landowners list private campsites and campers discover, filter, and book across many dimensions.",
+      overview:
+        "One of the first products I owned end to end at Caqophony. Landowners list campsites with rich metadata; campers discover, filter, and book. A classical full-stack build, no AI, where I got deep reps on search, authentication, and media handling that everything since has been built on.",
       contributions: [
-        "Built the full React frontend and the API layer behind it.",
-        "Built a virtualized listing feed, multi-image upload with client-side compression, and Framer Motion interactions.",
-        "Built a dynamic filter UI over on-the-fly CouchDB queries, plus a JWT and bcrypt auth system.",
+        "Built the full React frontend and the API layer behind it, end to end.",
+        "Built a dynamic filter engine over on-the-fly CouchDB Mango queries across many dimensions.",
+        "Built a virtualized feed (react-virtuoso) handling hundreds of listings smoothly.",
+        "Built multi-image upload with client-side compression and server-side references.",
+        "Built the auth system: JWT with bcrypt and stateless verification middleware.",
       ],
       tech: [
         "Next.js",
         "React",
         "TypeScript",
         "CouchDB",
-        "JWT",
+        "JWT / bcrypt",
+        "REST APIs",
         "Framer Motion",
         "react-virtuoso",
       ],

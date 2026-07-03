@@ -11,9 +11,9 @@ export function Work() {
         <Reveal>
           <SectionHeading eyebrow="Work" title="Selected projects" />
         </Reveal>
-        <div className="space-y-6 md:space-y-8">
+        <div className="grid auto-rows-fr grid-cols-1 gap-6 md:gap-8">
           {site.projects.map((project) => (
-            <Reveal key={project.slug}>
+            <Reveal key={project.slug} className="h-full">
               <ProjectCard project={project} />
             </Reveal>
           ))}
