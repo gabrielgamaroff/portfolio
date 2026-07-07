@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SmoothScroll } from "@/components/SmoothScroll";
+import { ScrollPager } from "@/components/ScrollPager";
 import { Background } from "@/components/Background";
 
 const geistSans = Geist({
@@ -49,7 +49,8 @@ export default function RootLayout({
       <body className="min-h-screen text-ink">
         <div className="scroll-progress" aria-hidden />
         <Background />
-        <SmoothScroll>{children}</SmoothScroll>
+        <ScrollPager />
+        {children}
       </body>
     </html>
   );

@@ -1,14 +1,12 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useLenis } from "lenis/react";
 import { ArrowUpRight, Lock, X } from "lucide-react";
 import { type Project } from "@/data/site";
+import { setPagerPaused } from "./pagerBus";
 import { ProjectGallery } from "./ProjectGallery";
 
 export function ProjectCard({ project }: { project: Project }) {
-  const lenis = useLenis();
-
   const onMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const el = e.currentTarget;
     const r = el.getBoundingClientRect();
@@ -16,11 +14,9 @@ export function ProjectCard({ project }: { project: Project }) {
     el.style.setProperty("--my", `${e.clientY - r.top}px`);
   };
 
-  // Freeze the smooth-scrolled background while the modal is open.
-  const onOpenChange = (open: boolean) => {
-    if (open) lenis?.stop();
-    else lenis?.start();
-  };
+  // Pause section paging while the modal is open so scrolling stays inside it
+  // (Radix locks the background scroll itself).
+  const onOpenChange = (open: boolean) => setPagerPaused(open);
 
   return (
     <Dialog.Root onOpenChange={onOpenChange}>
@@ -107,7 +103,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <Dialog.Content className="group pointer-events-none fixed inset-0 z-[101] grid place-items-center p-4 motion-safe:data-[state=open]:animate-overlay-in motion-safe:data-[state=closed]:animate-overlay-out">
           <div className="pointer-events-auto flex max-h-[88vh] w-[min(92vw,880px)] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl motion-safe:group-data-[state=open]:animate-pop-in motion-safe:group-data-[state=closed]:animate-pop-out">
             {/* header */}
-            <div className="relative shrink-0 border-b border-line px-6 py-5 sm:px-8">
+            <div className="relative shrink-0 border-b border-line px-5 py-4 sm:px-8 sm:py-5">
               <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-accent/10 to-transparent" />
               <div className="relative flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.08em] text-faint">
                 <span>{project.category}</span>
@@ -127,15 +123,23 @@ export function ProjectCard({ project }: { project: Project }) {
             </div>
 
             {/* scrollable body */}
-            <div
-              data-lenis-prevent
-              className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8"
-            >
+            <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-8 sm:py-6">
               <ProjectGallery name={project.name} gallery={project.gallery} />
 
-              <p className="mt-6 leading-relaxed text-muted">
-                {project.overview}
-              </p>
+              <div className="mt-6 space-y-4">
+                {project.overview.map((para, i) => (
+                  <p
+                    key={para.slice(0, 24)}
+                    className={
+                      i === 0
+                        ? "leading-relaxed text-ink/85"
+                        : "leading-relaxed text-muted"
+                    }
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
 
               <h4 className="mt-6 font-mono text-xs uppercase tracking-[0.08em] text-faint">
                 What I built

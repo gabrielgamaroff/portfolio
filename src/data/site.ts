@@ -11,8 +11,8 @@ export type Project = {
   category: string;
   /** Short summary shown on the card. */
   description: string;
-  /** Longer paragraph shown only in the modal. */
-  overview: string;
+  /** Longer description shown only in the modal, as separate paragraphs. */
+  overview: string[];
   contributions: string[];
   tech: string[];
   /** Path under /public, e.g. "/work/skrumrunner.png". Null renders a placeholder. */
@@ -31,15 +31,15 @@ export type SkillArea = {
 
 export const site = {
   name: "Gabriel Gamaroff",
-  role: "Full-Stack & Agentic Engineer",
+  role: "Agentic Engineer",
   email: "gabriel@caqophony.com",
   github: "https://github.com/gabrielgamaroff",
   // TODO: set your real LinkedIn URL; leave empty to hide the link.
   linkedin: "",
 
   hero: {
-    tagline: "Full-stack engineer building the layer where people and AI meet.",
-    sub: "Four years and four shipped products at Caqophony, from multi-agent systems to streaming AI interfaces, on Next.js, React, and TypeScript.",
+    tagline: "Agentic engineer building the layer where people and AI meet.",
+    sub: "Building multi-agent systems, the harnesses that make their output reliable, and streaming AI interfaces, on Next.js, React, and TypeScript.",
     status: "Open to remote roles · US, Eastern Time · No sponsorship needed",
   },
 
@@ -126,8 +126,12 @@ export const site = {
       category: "AI · Agentic",
       description:
         "Autonomous agents compile a plain product vision into a working software project, blueprint through deploy, with a human approving each phase.",
-      overview:
-        "Skrumrunner is the flagship: a multi-agent system that takes a plain-language product vision and produces a structured software project, agents planning, writing, testing, and verifying while a human approves each phase. I worked across the whole thing, the agent engine and runtime underneath and the React interfaces that drive and observe it. The hard part is never generating code, it is making a long-running agent loop reliable and affordable, and that is where most of my work went.",
+      overview: [
+        "Skrumrunner is the flagship. It takes a plain-language product vision and drives it all the way to executed, verified code: the system breaks the intent into tasks, then a pipeline of specialized agents explores the codebase, plans an approach, writes the change, and adversarially verifies it in a fresh pass, looping back to fix what fails while a human approves each phase before anything merges.",
+        "Each phase hands the next a small structured context instead of a full transcript, and steps route to a cheaper or stronger model by difficulty, which is what keeps a long agent loop affordable. Execution runs inside disposable cloud sandboxes that pause between phases and resume for human intervention, with each agent's tools scoped to its role.",
+        "Generated code has to clear real gates before it ships: type-checking, linting, the test suite, and visual-parity checks driven by a QA agent that operates a real browser over MCP. I built across the whole thing, the agent engine and runtime underneath and the React interfaces that drive and observe it, with dashboards that stream agent activity, turn counts, and token spend live over SSE.",
+        "The hard part was never generating code. It was making a long-running agent loop reliable, observable, and affordable, and that is where most of my work went.",
+      ],
       contributions: [
         "Designed the multi-agent pipeline: separate plan, execute, and adversarial-verify agents with tiered model routing.",
         "Built the agent runtime on E2B sandboxes with pause/resume, prompt caching, context compaction, and replay logging.",
@@ -156,8 +160,11 @@ export const site = {
       category: "AI product",
       description:
         "An AI app that turns a short brief into a full podcast script, generated live by an LLM and edited paragraph by paragraph by instruction.",
-      overview:
-        "A production AI writing tool built on Claude. Give it a topic, tone, structure, and length and it streams a complete script back token by token; any paragraph can then be rewritten by the model from a natural-language instruction or improved automatically. The engineering focus was the generation and editing pipeline, all metered by real token usage. It was my first deep build on the applied LLM layer, and the foundation for the agentic work that followed.",
+      overview: [
+        "A production AI writing tool built on Claude. You give it a topic, tone, structure, and target length, and it streams a complete, sectioned script back token by token. From there any paragraph can be rewritten from a plain-language instruction or sharpened by an automatic improve pass, with the model returning only the changed section so the rest of the draft stays intact.",
+        "The real engineering was the generation and editing pipeline: prompts that hold format and length coherent across a long document, reliable streaming of partial output over the network, and usage metering tied to real token counts so spend stays predictable and billable, gated by a pre-run affordability check.",
+        "It was my first deep build on the applied LLM layer, and its patterns of structured prompting, streaming, and usage accounting became the foundation for the agentic work that followed.",
+      ],
       contributions: [
         "Built the streaming generation pipeline: Claude output over SSE with length-aware, format-specific prompts.",
         "Engineered the prompts and the inline AI editor: rewrite any paragraph by instruction or an auto-improve pass.",
@@ -187,8 +194,11 @@ export const site = {
       category: "Marketplace · AI content",
       description:
         "A UK local-commerce marketplace connecting merchants and shoppers by town, with map discovery, real checkout, and AI-generated content.",
-      overview:
-        "A marketplace SaaS on Next.js, Supabase, and Stripe: merchant profiles, product listings, reviews, map-based discovery, and checkout, integrated with the Violet POS platform. I led the build end to end. It is where I got my depth on payments and third-party commerce integration, plus an early applied-AI touch for generating onboarding content.",
+      overview: [
+        "A local-commerce marketplace SaaS on Next.js, Supabase, and Stripe that connects merchants and shoppers by town. It carries merchant profiles, product listings and reviews, map-based discovery, and a real checkout, wired into the Violet POS platform so orders flow through to a live commerce backend.",
+        "I led the build end to end, from the database schema through the payment flow to deploy. The demanding parts were the third-party commerce integration, abstracting cart, checkout, and order submission over an external API with token refresh and idempotent, asynchronous order handling, and a Stripe Elements checkout that stays consistent when network calls fail or retry.",
+        "It also carries an early applied-AI touch, generating town and merchant descriptions with a model at scale, and it is where I got my real depth on payments and commerce plumbing.",
+      ],
       contributions: [
         "Led full-stack development on Next.js, Supabase, and Stripe, from schema to deploy.",
         "Built the Violet POS integration abstracting cart, checkout, and orders with token refresh.",
@@ -217,8 +227,11 @@ export const site = {
       category: "Marketplace",
       description:
         "A peer-to-peer marketplace where landowners list private campsites and campers discover, filter, and book across many dimensions.",
-      overview:
-        "One of the first products I owned end to end at Caqophony. Landowners list campsites with rich metadata; campers discover, filter, and book. A classical full-stack build, no AI, where I got deep reps on search, authentication, and media handling that everything since has been built on.",
+      overview: [
+        "One of the first products I owned end to end. Landowners list private campsites with rich metadata, and campers discover, filter, and book across many dimensions at once.",
+        "It is a classical full-stack build with no AI, and the value was in the fundamentals done well: a dynamic filter engine that turns many simultaneous constraints into efficient on-the-fly database queries, a virtualized feed that stays smooth across hundreds of listings, multi-image upload with client-side compression and server-side references, and a stateless JWT auth system with hashed credentials and verification middleware.",
+        "These are the search, auth, and media foundations that everything I have built since sits on top of.",
+      ],
       contributions: [
         "Built the full React frontend and the API layer behind it, end to end.",
         "Built a dynamic filter engine over on-the-fly CouchDB Mango queries across many dimensions.",

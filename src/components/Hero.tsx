@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Container } from "./Container";
 import { Reveal } from "./Reveal";
+import { ContactDialog } from "./ContactDialog";
 import { site } from "@/data/site";
 
 export function Hero() {
@@ -35,12 +36,11 @@ export function Hero() {
               {site.hero.sub}
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
-              <a
-                href={`mailto:${site.email}`}
-                className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-[0_0_40px_rgb(99_102_241_/_0.25)] transition-colors hover:bg-accent-2"
-              >
-                Email me
-              </a>
+              <ContactDialog>
+                <button className="cursor-pointer rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-[0_0_40px_rgb(99_102_241_/_0.25)] transition-colors hover:bg-accent-2">
+                  Email me
+                </button>
+              </ContactDialog>
               <a
                 href="#work"
                 className="text-sm font-medium text-muted transition-colors hover:text-ink"

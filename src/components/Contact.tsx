@@ -1,5 +1,6 @@
 import { Section } from "./Section";
 import { SectionHeading } from "./SectionHeading";
+import { ContactDialog } from "./ContactDialog";
 import { site } from "@/data/site";
 
 export function Contact() {
@@ -11,12 +12,11 @@ export function Contact() {
         based on Eastern time, and available from early August.
       </p>
       <div className="mt-7 flex flex-wrap items-center gap-4">
-        <a
-          href={`mailto:${site.email}`}
-          className="rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-2"
-        >
-          Email me
-        </a>
+        <ContactDialog>
+          <button className="cursor-pointer rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-2">
+            Email me
+          </button>
+        </ContactDialog>
         {site.linkedin && (
           <a
             href={site.linkedin}

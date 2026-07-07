@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useLenis } from "lenis/react";
+import { pagerGoTo } from "./pagerBus";
 import { site } from "@/data/site";
 
 export function Nav() {
   const [active, setActive] = useState("");
-  const lenis = useLenis();
   const deepLinked = useRef(false);
 
-  const scrollToSection = (id: string, immediate = false) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // center the section; for sections taller than the viewport, land on the
-    // top with room for the fixed nav.
-    const centerOffset = Math.max(0, (window.innerHeight - el.offsetHeight) / 2);
-    const target = el.offsetTop - centerOffset - (centerOffset === 0 ? 64 : 0);
-    if (lenis) {
-      lenis.scrollTo(target, immediate ? { immediate: true } : { duration: 1.1 });
-    } else {
-      window.scrollTo({ top: target, behavior: immediate ? "auto" : "smooth" });
-    }
+  const scrollToSection = (id: string) => {
+    // The pager owns scrolling; it centers the section (or lands on the top of
+    // a taller-than-viewport one) using the same logic as gesture paging.
+    pagerGoTo(id);
   };
 
   // Track which section is in view (hero included).
@@ -57,10 +48,10 @@ export function Nav() {
     const id = window.location.hash.slice(1);
     if (!id || !document.getElementById(id)) return;
     deepLinked.current = true;
-    const t = window.setTimeout(() => scrollToSection(id, true), 250);
+    const t = window.setTimeout(() => scrollToSection(id), 300);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lenis]);
+  }, []);
 
   const go = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
