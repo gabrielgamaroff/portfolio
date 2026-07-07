@@ -122,7 +122,7 @@ export const site = {
       name: "Skrumrunner",
       tagline:
         "Multi-agent platform that turns a product vision into a working software project.",
-      year: "2024–2025",
+      year: "2025–2026",
       category: "AI · Agentic",
       description:
         "Autonomous agents compile a plain product vision into a working software project, blueprint through deploy, with a human approving each phase.",
@@ -150,13 +150,24 @@ export const site = {
         "Playwright",
       ],
       image: null,
+      gallery: [
+        "/work/skrumrunner/01-home.png",
+        "/work/skrumrunner/02-generate.png",
+        "/work/skrumrunner/03-execution.png",
+        "/work/skrumrunner/04-sprint-execute.png",
+        "/work/skrumrunner/05-agents.png",
+        "/work/skrumrunner/06-cortex.png",
+        "/work/skrumrunner/07-costs.png",
+        "/work/skrumrunner/08-tasks.png",
+        "/work/skrumrunner/09-analytics.png",
+      ],
       links: { note: "Private repo · built at Caqophony" },
     },
     {
       slug: "smartcast",
       name: "smartcast",
       tagline: "AI podcast-script generator with a live, model-powered editor.",
-      year: "2023–2024",
+      year: "2024–2025",
       category: "AI product",
       description:
         "An AI app that turns a short brief into a full podcast script, generated live by an LLM and edited paragraph by paragraph by instruction.",
@@ -184,12 +195,14 @@ export const site = {
       ],
       image: null,
       gallery: [
-        "/work/smartcast/01-home.png",
-        "/work/smartcast/02-features.png",
-        "/work/smartcast/03-create.png",
-        "/work/smartcast/04-wizard.png",
+        "/work/smartcast/01-hero.png",
+        "/work/smartcast/02-configure.png",
+        "/work/smartcast/03-topic.png",
+        "/work/smartcast/04-steps.png",
         "/work/smartcast/05-detail.png",
-        "/work/smartcast/06-pricing.png",
+        "/work/smartcast/06-sections.png",
+        "/work/smartcast/07-features.png",
+        "/work/smartcast/08-pricing.png",
       ],
       links: { note: "Private repo · built at Caqophony" },
     },
@@ -198,7 +211,7 @@ export const site = {
       name: "MarketTown",
       tagline:
         "Local-commerce marketplace connecting merchants and shoppers by town.",
-      year: "2022–2023",
+      year: "2023–2024",
       category: "Marketplace · AI content",
       description:
         "A UK local-commerce marketplace connecting merchants and shoppers by town, with map discovery, real checkout, and AI-generated content.",
@@ -231,7 +244,7 @@ export const site = {
       slug: "camperpro",
       name: "CamperPro",
       tagline: "Peer-to-peer marketplace for discovering and booking campsites.",
-      year: "2022",
+      year: "2022–2023",
       category: "Marketplace",
       description:
         "A peer-to-peer marketplace where landowners list private campsites and campers discover, filter, and book across many dimensions.",
