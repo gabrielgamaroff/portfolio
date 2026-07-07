@@ -183,6 +183,14 @@ export const site = {
         "Supabase",
       ],
       image: null,
+      gallery: [
+        "/work/smartcast/01-home.png",
+        "/work/smartcast/02-features.png",
+        "/work/smartcast/03-create.png",
+        "/work/smartcast/04-wizard.png",
+        "/work/smartcast/05-detail.png",
+        "/work/smartcast/06-pricing.png",
+      ],
       links: { note: "Private repo · built at Caqophony" },
     },
     {
@@ -250,6 +258,11 @@ export const site = {
         "react-virtuoso",
       ],
       image: null,
+      gallery: [
+        "/work/campr/01-discover.png",
+        "/work/campr/02-booking.png",
+        "/work/campr/03-create.png",
+      ],
       links: { note: "Private repo · built at Caqophony" },
     },
   ] satisfies Project[],
