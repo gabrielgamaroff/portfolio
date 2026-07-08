@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# gabrielgamaroff.com
 
-## Getting Started
+Personal portfolio for Gabriel Gamaroff, a full-stack and agentic engineer. A
+single-page site with a hero, about, interactive skills explorer, project case
+studies with image galleries, and a contact form.
 
-First, run the development server:
+Live at [gabrielgamaroff.com](https://gabrielgamaroff.com).
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) and React 19
+- TypeScript in `strict` mode
+- [Tailwind CSS v4](https://tailwindcss.com)
+- [Motion](https://motion.dev) for animation
+- [Radix UI](https://www.radix-ui.com) dialogs for modals and the lightbox
+- [Embla Carousel](https://www.embla-carousel.com) for project galleries
+- [Playwright](https://playwright.dev) for end-to-end smoke tests
+- [Web3Forms](https://web3forms.com) for the contact form (no backend)
+- Deployed on [Vercel](https://vercel.com)
+
+## Getting started
+
+Requires Node 20+ and [pnpm](https://pnpm.io).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command         | Description                          |
+| --------------- | ------------------------------------ |
+| `pnpm dev`      | Start the dev server                 |
+| `pnpm build`    | Production build                     |
+| `pnpm start`    | Serve the production build           |
+| `pnpm lint`     | Run ESLint                           |
+| `pnpm test:e2e` | Run the Playwright smoke suite       |
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/            Root layout, metadata, OG image, global styles
+  components/     UI components (sections, nav, modals, gallery, scroll pager)
+  data/site.ts   Single source of truth for all site content
+public/work/     Project screenshots
+tests/           Playwright smoke tests
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All copy, skills, and project data live in `src/data/site.ts`, so content
+changes never require touching components.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Notable pieces
 
-## Deploy on Vercel
+- **`ScrollPager`** turns each vertical gesture into a single section change
+  (one gesture, one page) on top of native scrolling, while letting sections
+  taller than the viewport scroll normally. It respects `prefers-reduced-motion`.
+- **`ProjectCard` / `ProjectGallery`** render each project as a case-study modal
+  with an Embla carousel and a click-to-expand lightbox.
+- **`ContactDialog`** posts to Web3Forms with a honeypot and a `mailto` fallback.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The contact form uses a public Web3Forms access key with a default baked in.
+To use your own, set it in the environment (see `.env.example`):
+
+```
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your-key
+```
+
+## Accessibility and motion
+
+Every animation is gated behind `prefers-reduced-motion`, and the site renders
+its full content with animation disabled. The Playwright suite verifies this,
+along with no console errors and no horizontal overflow, on desktop and mobile
+viewports.

@@ -34,7 +34,7 @@ export const site = {
   role: "Agentic Engineer",
   email: "gabriel@caqophony.com",
   github: "https://github.com/gabrielgamaroff",
-  // TODO: set your real LinkedIn URL; leave empty to hide the link.
+  // Set a LinkedIn URL to show the link in the nav and contact section; leave empty to hide it.
   linkedin: "",
 
   hero: {

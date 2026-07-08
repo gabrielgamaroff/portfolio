@@ -50,7 +50,6 @@ export function Nav() {
     deepLinked.current = true;
     const t = window.setTimeout(() => scrollToSection(id), 300);
     return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const go = (e: React.MouseEvent, id: string) => {

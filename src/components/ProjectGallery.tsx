@@ -33,7 +33,8 @@ export function ProjectGallery({
 
   useEffect(() => {
     if (!embla) return;
-    onSelect();
+    // Embla starts on snap 0 (our initial state), so we only need to track
+    // subsequent changes — no synchronous setState in the effect body.
     embla.on("select", onSelect);
     embla.on("reInit", onSelect);
     return () => {

@@ -46,7 +46,7 @@ test("filmstrip capture", async ({ page }, info) => {
     await page.evaluate((sel) => {
       document.getElementById(sel)?.scrollIntoView({ block: "start" });
     }, id);
-    // let Lenis settle + reveals fire + parallax update
+    // let the scroll settle + reveals fire + parallax update
     await page.waitForTimeout(1100);
     await page.screenshot({ path: `${dir}/${p}-${id}.png` });
   }
