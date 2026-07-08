@@ -51,6 +51,22 @@ export const site = {
 
   skillAreas: [
     {
+      id: "ai",
+      label: "AI & Agentic Systems",
+      blurb:
+        "My deepest area. I build multi-agent pipelines, the harnesses and evaluation loops that keep their output reliable, prompt and context engineering, tool use over MCP, and sandboxed execution with cost-aware routing. The point is to build the system around the model, so quality never depends on the one you run.",
+      items: [
+        "Multi-agent",
+        "Harnesses",
+        "Prompt engineering",
+        "Evals",
+        "Claude / OpenAI",
+        "MCP",
+        "E2B sandboxes",
+        "Cost routing",
+      ],
+    },
+    {
       id: "frontend",
       label: "Frontend",
       blurb:
@@ -80,22 +96,6 @@ export const site = {
         "Auth (JWT/OAuth)",
         "Stripe",
         "Zod",
-      ],
-    },
-    {
-      id: "ai",
-      label: "AI & Agentic Systems",
-      blurb:
-        "My deepest area. I build multi-agent pipelines, the harnesses and evaluation loops that keep their output reliable, prompt and context engineering, tool use over MCP, and sandboxed execution with cost-aware routing. The point is to build the system around the model, so quality never depends on the one you run.",
-      items: [
-        "Multi-agent",
-        "Harnesses",
-        "Prompt engineering",
-        "Evals",
-        "Claude / OpenAI",
-        "MCP",
-        "E2B sandboxes",
-        "Cost routing",
       ],
     },
     {
