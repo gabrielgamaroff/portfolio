@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Gabriel Gamaroff — Full-Stack & Agentic Engineer";
+export const alt = "Gabriel Gamaroff — Agentic Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -27,7 +27,7 @@ export default function OpengraphImage() {
             color: "#818cf8",
           }}
         >
-          Full-Stack & Agentic Engineer
+          Agentic Engineer
         </div>
         <div
           style={{

@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const title = "Gabriel Gamaroff — Full-Stack & Agentic Engineer";
+const title = "Gabriel Gamaroff — Agentic Engineer";
 const description =
-  "Full-stack engineer building the layer where people and AI meet. Four years shipping production AI products on Next.js, React, and TypeScript.";
+  "Agentic engineer building the layer where people and AI meet. Four years shipping production AI products on Next.js, React, and TypeScript.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gabrielgamaroff.com"),
