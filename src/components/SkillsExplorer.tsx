@@ -85,7 +85,7 @@ export function SkillsExplorer() {
                 role="tab"
                 aria-selected={selected}
                 onClick={() => setActiveId(area.id)}
-                className={`group flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
+                className={`group flex shrink-0 cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
                   selected ? "bg-surface text-ink" : "text-faint hover:text-ink"
                 }`}
               >

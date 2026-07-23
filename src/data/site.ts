@@ -31,7 +31,7 @@ export type SkillArea = {
 
 export const site = {
   name: "Gabriel Gamaroff",
-  role: "Agentic Engineer",
+  role: "Full Stack Engineer",
   email: "gabriel@caqophony.com",
   github: "https://github.com/gabrielgamaroff",
   // Set a LinkedIn URL to show the link in the nav and contact section; leave empty to hide it.
