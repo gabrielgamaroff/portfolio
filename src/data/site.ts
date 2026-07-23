@@ -38,7 +38,7 @@ export const site = {
   linkedin: "",
 
   hero: {
-    tagline: "Agentic engineer building the layer where people and AI meet.",
+    tagline: "Full stack engineer building the layer where people and AI meet.",
     sub: "Building multi-agent systems, the harnesses that make their output reliable, and streaming AI interfaces, on Next.js, React, and TypeScript.",
     status: "Open to remote roles · US, Eastern Time · No sponsorship needed",
   },
